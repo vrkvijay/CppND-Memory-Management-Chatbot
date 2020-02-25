@@ -50,6 +50,19 @@ ChatBotFrame::ChatBotFrame(const wxString &title) : wxFrame(NULL, wxID_ANY, titl
     this->Centre();
 }
 
+ChatBotFrame::~ChatBotFrame()
+{    
+    if(_panelDialog != nullptr)
+    {
+        delete _panelDialog;
+    }
+    
+    if(_userTextCtrl != nullptr)
+    {
+        delete _userTextCtrl;
+    }
+}
+
 void ChatBotFrame::OnEnter(wxCommandEvent &WXUNUSED(event))
 {
     // retrieve text from text control
@@ -117,8 +130,8 @@ ChatBotPanelDialog::ChatBotPanelDialog(wxWindow *parent, wxWindowID id)
     //// STUDENT CODE
     ////
 
-    // create chat logic instance
-    _chatLogic = new ChatLogic(); 
+    // create chat logic instance<
+    _chatLogic = std::make_shared<ChatLogic>(); 
 
     // pass pointer to chatbot dialog so answers can be displayed in GUI
     _chatLogic->SetPanelDialogHandle(this);
@@ -135,7 +148,7 @@ ChatBotPanelDialog::~ChatBotPanelDialog()
     //// STUDENT CODE
     ////
 
-    delete _chatLogic;
+    delete _dialogSizer;
 
     ////
     //// EOF STUDENT CODE
@@ -213,4 +226,10 @@ ChatBotPanelDialogItem::ChatBotPanelDialogItem(wxPanel *parent, wxString text, b
 
     // set background color
     this->SetBackgroundColour((isFromUser == true ? wxT("YELLOW") : wxT("BLUE")));
+}
+
+ChatBotPanelDialogItem::~ChatBotPanelDialogItem()
+{
+    delete _chatBotImg;
+    delete _chatBotTxt;
 }
